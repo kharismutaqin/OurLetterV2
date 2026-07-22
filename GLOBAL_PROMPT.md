@@ -79,7 +79,22 @@ Sebelum menganggap satu tahap selesai:
 
 ---
 
-## 8. Komunikasi
+## 9. Deploy ke Vercel
+
+- Project diatur agar siap deploy ke Vercel tanpa backend.
+- File `vercel.json` di root menentukan build command dan output directory.
+- Vite config di `artifacts/web/vite.config.ts` sudah fallback ke base path `/` dan port 3000 jika environment variables Replit tidak tersedia (misalnya saat build di Vercel).
+- Root `package.json` memiliki `packageManager` agar Vercel mengenali pnpm.
+- Cara deploy:
+  1. Push project ke repository GitHub.
+  2. Import repository di [vercel.com](https://vercel.com).
+  3. Vercel akan membaca `vercel.json` dan build command-nya: `pnpm --filter @workspace/web run build`.
+  4. Output static site berada di `artifacts/web/dist/public`.
+- Jika ingin deploy via Vercel CLI, pastikan `.gitignore` mengabaikan folder `.vercel`.
+
+---
+
+## 10. Komunikasi
 
 - Jelaskan singkat apa yang sedang dibangun sebelum mulai.
 - Setelah selesai, ringkas apa yang berubah dan di mana file-file berada.

@@ -8,6 +8,17 @@ Mobile-first web app. Built step by step.
 - `pnpm --filter @workspace/web run typecheck` — typecheck the web app
 - `pnpm --filter @workspace/web run build` — build the web app
 
+## Deploy to Vercel
+
+- Project is configured for Vercel static deployment.
+- `vercel.json` at the root sets:
+  - Build command: `pnpm --filter @workspace/web run build`
+  - Output directory: `artifacts/web/dist/public`
+  - Framework: `null` (custom static build)
+- `vite.config.ts` falls back to base path `/` and port `3000` when Replit env vars are absent, so it builds cleanly on Vercel.
+- Root `package.json` declares `packageManager: "pnpm@10.26.1"` so Vercel uses pnpm.
+- To deploy: push to GitHub and import the repository on [vercel.com](https://vercel.com). No backend or database is needed.
+
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
