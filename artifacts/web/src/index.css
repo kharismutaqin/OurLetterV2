@@ -30,4 +30,13 @@ body {
 .page {
   width: 100%;
   min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: 2rem;
+}
+
+.letter-stage {
+  overflow: visible;
 }
