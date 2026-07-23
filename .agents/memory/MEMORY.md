@@ -1,0 +1,1 @@
+- [Controlled FoldedLetter in stacks](controlled-foldedletter-stack.md) — Let a parent stack own gestures by making the letter controlled + non-interactive.

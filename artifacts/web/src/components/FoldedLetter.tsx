@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 
 // Each asset is 600 × 400 px → 3 : 2 aspect ratio
@@ -13,6 +13,12 @@ export interface FoldedLetterProps {
   bottomSrc: string;
   /** Width of the note in pixels. Height of each panel = noteWidth / ASPECT */
   noteWidth: number;
+  /** Controlled open state. If omitted, the component manages its own state. */
+  isOpen?: boolean;
+  /** Called when the open state should change (controlled mode). */
+  onOpenChange?: (open: boolean) => void;
+  /** Whether the letter should respond to its own click/tap. Default true. */
+  interactive?: boolean;
 }
 
 /**
@@ -26,17 +32,21 @@ export interface FoldedLetterProps {
  *     ABOVE the component's own bounding box. Make sure the parent container
  *     allows overflow: visible so the open panel is not clipped.
  *
- * Click/tap anywhere on the component to toggle open ↔ closed.
+ * Click/tap anywhere on the component to toggle open ↔ closed (when interactive).
  */
 export function FoldedLetter({
   coverSrc,
   topSrc,
   bottomSrc,
   noteWidth,
+  isOpen: isOpenProp,
+  onOpenChange,
+  interactive = true,
 }: FoldedLetterProps) {
   const panelH = noteWidth / ASPECT;
-  const [isOpen, setIsOpen] = useState(false);
-  const animating = useRef(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const controlled = isOpenProp !== undefined;
+  const open = controlled ? isOpenProp : internalOpen;
 
   // –180 = closed (cover.png on top), 0 = open (top.png flat above bottom)
   const rotX = useMotionValue(-180);
@@ -64,26 +74,31 @@ export function FoldedLetter({
   // Fold-crease hairline only visible when fully open
   const creaseOpacity = useTransform(rotX, [-180, -60, 0], [0, 0, 0.45]);
 
-  const toggle = async (e: React.MouseEvent | React.TouchEvent) => {
-    e.stopPropagation();
-    if (animating.current) return;
-    animating.current = true;
-    const next = isOpen ? -180 : 0;
-    setIsOpen(!isOpen);
-    await animate(rotX, next, {
+  useEffect(() => {
+    const target = open ? 0 : -180;
+    const controls = animate(rotX, target, {
       duration: 0.92,
       ease: [0.4, 0.0, 0.2, 1.0],
     });
-    animating.current = false;
+    return () => controls.stop();
+  }, [open, rotX]);
+
+  const toggle = (e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation();
+    if (controlled) {
+      onOpenChange?.(!open);
+    } else {
+      setInternalOpen(!open);
+    }
   };
 
   return (
     <div
-      onClick={toggle}
+      onClick={interactive ? toggle : undefined}
       style={{
-        cursor: 'pointer',
+        cursor: interactive ? 'pointer' : 'default',
         userSelect: 'none',
-        touchAction: 'manipulation',
+        touchAction: interactive ? 'manipulation' : 'none',
         WebkitTapHighlightColor: 'transparent',
         display: 'inline-block',
       }}
