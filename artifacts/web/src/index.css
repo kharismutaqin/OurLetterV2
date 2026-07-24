@@ -31,10 +31,12 @@ body {
   width: 100%;
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   overflow: visible;
   padding: 2rem;
+  /* Top area is intentionally left empty for a future header. */
 }
 
 .letter-stage {
