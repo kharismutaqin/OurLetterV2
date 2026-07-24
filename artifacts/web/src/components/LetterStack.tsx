@@ -78,7 +78,7 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
         style={{
           position: 'relative',
           width: noteWidth,
-          height: panelH + 180,
+          height: panelH + 120,
           perspective: 1100,
           cursor: 'pointer',
           touchAction: 'none',
@@ -103,15 +103,15 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
                 height: panelH,
                 transformStyle: 'preserve-3d',
                 pointerEvents: isFront ? 'auto' : 'none',
-                zIndex: 30 - position * 10,
+                zIndex: 30 - position,
+                filter: 'drop-shadow(0 5px 12px rgba(0,0,0,0.3))',
               }}
               animate={{
-                y: position * 30,
-                z: position * -60,
-                scale: 1 - position * 0.05,
-                rotateX: position * -6,
+                y: position * 18,
+                z: position * -40,
+                scale: 1 - position * 0.025,
+                rotateX: position * -3,
                 rotateZ: position === 0 ? 0 : position % 2 === 1 ? 3 : -3,
-                opacity: 1 - position * 0.08,
               }}
               transition={{ type: 'spring', stiffness: 220, damping: 24 }}
             >
