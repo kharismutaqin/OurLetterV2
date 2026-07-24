@@ -1,25 +1,14 @@
 import { LetterStack } from './components/LetterStack';
 
-const LETTERS = [
-  {
-    id: '1',
-    coverSrc: '/letter-01/cover.png',
-    topSrc: '/letter-01/top.png',
-    bottomSrc: '/letter-01/bottom.png',
-  },
-  {
-    id: '2',
-    coverSrc: '/letter-02/cover.png',
-    topSrc: '/letter-02/top.png',
-    bottomSrc: '/letter-02/bottom.png',
-  },
-  {
-    id: '3',
-    coverSrc: '/letter-03/cover.png',
-    topSrc: '/letter-03/top.png',
-    bottomSrc: '/letter-03/bottom.png',
-  },
-];
+const LETTERS = Array.from({ length: 7 }, (_, i) => {
+  const num = String(i + 1).padStart(2, '0');
+  return {
+    id: String(i + 1),
+    coverSrc: `/letter-${num}/cover.png`,
+    topSrc: `/letter-${num}/top.png`,
+    bottomSrc: `/letter-${num}/bottom.png`,
+  };
+});
 
 export default function App() {
   return (
