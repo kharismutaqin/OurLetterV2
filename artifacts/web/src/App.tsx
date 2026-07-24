@@ -9,15 +9,15 @@ const LETTERS = [
   },
   {
     id: '2',
-    coverSrc: '/letter-01/cover.png',
-    topSrc: '/letter-01/top.png',
-    bottomSrc: '/letter-01/bottom.png',
+    coverSrc: '/letter-02/cover.png',
+    topSrc: '/letter-02/top.png',
+    bottomSrc: '/letter-02/bottom.png',
   },
   {
     id: '3',
-    coverSrc: '/letter-01/cover.png',
-    topSrc: '/letter-01/top.png',
-    bottomSrc: '/letter-01/bottom.png',
+    coverSrc: '/letter-03/cover.png',
+    topSrc: '/letter-03/top.png',
+    bottomSrc: '/letter-03/bottom.png',
   },
 ];
 
