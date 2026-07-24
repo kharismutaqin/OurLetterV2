@@ -5,8 +5,8 @@ import { FoldedLetter } from './FoldedLetter';
 // Each asset is 600 × 400 px → 3 : 2 aspect ratio
 const ASPECT = 600 / 400;
 
-// Resting rotation for each card, matching the original shuffling deck effect.
-const ANGLES = [4, -8, -7, 11, 13, -17, 20];
+// Resting rotation for each card. Selected card is always 0°; others are subtle.
+const ANGLES = [2, -3, 1, -2, 3, -1, 2];
 
 interface LetterData {
   id: string;
@@ -106,7 +106,7 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
           const isSelected = index === activeIndex;
           const distance = (index - activeIndex + n) % n;
           const zIndex = 20 - distance;
-          const angle = ANGLES[index % ANGLES.length];
+          const angle = isSelected ? 0 : ANGLES[index % ANGLES.length];
           const animation = shuffle
             ? isSelected
               ? 'shuffle-reveal 0.6s cubic-bezier(0.33, 1, 0.68, 1) forwards'
