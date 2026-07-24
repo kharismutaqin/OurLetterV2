@@ -42,3 +42,20 @@ body {
 .letter-stage {
   overflow: visible;
 }
+
+/* ── Shuffle card animation helpers ───────────────────────────────────── */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes shuffle-straighten {
+  50% { --angle: 0deg; }
+}
+
+@keyframes shuffle-reveal {
+  0% { translate: 0; }
+  50% { translate: -100% 0; --angle: 0deg; }
+  100% { translate: 0; }
+}

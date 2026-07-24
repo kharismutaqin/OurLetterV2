@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, PanInfo } from 'framer-motion';
 import { FoldedLetter } from './FoldedLetter';
 
 // Each asset is 600 × 400 px → 3 : 2 aspect ratio
 const ASPECT = 600 / 400;
+
+// Resting rotation for each card, matching the original shuffling deck effect.
+const ANGLES = [4, -8, -7, 11, 13, -17, 20];
 
 interface LetterData {
   id: string;
@@ -22,22 +25,36 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
   const n = letters.length;
   const [activeIndex, setActiveIndex] = useState(0);
   const [openId, setOpenId] = useState<string | null>(null);
+  const [shuffle, setShuffle] = useState(false);
+  const isFirstRender = useRef(true);
 
-  const frontId = letters[activeIndex]?.id ?? null;
+  // Trigger a one-time shuffle animation whenever the selected letter changes.
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    let raf = 0;
+    setShuffle(false);
+    raf = requestAnimationFrame(() => setShuffle(true));
+    const timer = setTimeout(() => setShuffle(false), 600);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
+  }, [activeIndex]);
 
-  // Close any open letter when the active letter changes — keeps the stack clean.
+  // Close an open letter when the selection changes.
   useEffect(() => {
     setOpenId(null);
   }, [activeIndex]);
 
-  const goTo = (index: number) => {
-    setActiveIndex((index % n + n) % n);
-  };
-
+  const goTo = (index: number) => setActiveIndex(((index % n) + n) % n);
   const goNext = () => goTo(activeIndex + 1);
   const goPrev = () => goTo(activeIndex - 1);
 
   const handleTap = () => {
+    const frontId = letters[activeIndex]?.id;
     if (!frontId) return;
     setOpenId((prev) => (prev === frontId ? null : frontId));
   };
@@ -54,18 +71,15 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
 
     if (horizontal) {
       if (dx < -threshold || vx < -vThreshold) {
-        // Swipe left → next letter.
         goNext();
       } else if (dx > threshold || vx > vThreshold) {
-        // Swipe right → previous letter.
         goPrev();
       }
     } else {
       if (dy < -threshold || vy < -vThreshold) {
-        // Swipe up → open the front letter.
+        const frontId = letters[activeIndex]?.id;
         if (frontId) setOpenId(frontId);
       } else if (dy > threshold || vy > vThreshold) {
-        // Swipe down → close the open letter.
         setOpenId(null);
       }
     }
@@ -74,59 +88,54 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 28 }}>
       <motion.div
-        className="letter-stack"
+        className="letter-deck"
         style={{
-          position: 'relative',
+          display: 'grid',
+          gridTemplateAreas: '"stack"',
           width: noteWidth,
-          height: panelH + 120,
-          perspective: 1100,
-          cursor: 'pointer',
+          height: panelH + 40,
           touchAction: 'none',
           userSelect: 'none',
           WebkitTapHighlightColor: 'transparent',
+          cursor: 'pointer',
         }}
         onTap={handleTap}
         onPanEnd={handleSwipe}
       >
         {letters.map((letter, index) => {
-          let position = index - activeIndex;
-          if (position > n / 2) position -= n;
-          if (position < -n / 2) position += n;
-          const isFront = position === 0;
+          const isSelected = index === activeIndex;
+          const distance = (index - activeIndex + n) % n;
+          const zIndex = 20 - distance;
+          const angle = ANGLES[index % ANGLES.length];
+          const animation = shuffle
+            ? isSelected
+              ? 'shuffle-reveal 0.6s cubic-bezier(0.33, 1, 0.68, 1) forwards'
+              : 'shuffle-straighten 0.6s cubic-bezier(0.33, 1, 0.68, 1) forwards'
+            : 'none';
 
           return (
-            <motion.div
+            <div
               key={letter.id}
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: noteWidth,
-                height: panelH,
-                transformStyle: 'preserve-3d',
-                pointerEvents: isFront ? 'auto' : 'none',
-                zIndex: 30 - Math.abs(position),
-                filter: 'drop-shadow(0 5px 12px rgba(0,0,0,0.3))',
-              }}
-              animate={{
-                y: position * 18,
-                z: -Math.abs(position) * 40,
-                scale: 1 - Math.abs(position) * 0.025,
-                rotateX: -Math.abs(position) * 3,
-                rotateZ: position === 0 ? 0 : Math.abs(position) % 2 === 1 ? 3 : -3,
-              }}
-              transition={{ type: 'tween', duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
+                gridArea: '1 / 1',
+                placeSelf: 'center',
+                zIndex,
+                pointerEvents: isSelected ? 'auto' : 'none',
+                rotate: 'var(--angle)',
+                animation,
+                ['--angle' as string]: `${angle}deg`,
+              } as React.CSSProperties}
             >
               <FoldedLetter
                 coverSrc={letter.coverSrc}
                 topSrc={letter.topSrc}
                 bottomSrc={letter.bottomSrc}
                 noteWidth={noteWidth}
-                isOpen={isFront && openId === letter.id}
+                isOpen={isSelected && openId === letter.id}
                 onOpenChange={(open) => setOpenId(open ? letter.id : null)}
                 interactive={false}
               />
-            </motion.div>
+            </div>
           );
         })}
       </motion.div>
