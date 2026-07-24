@@ -77,8 +77,8 @@ export function FoldedLetter({
   useEffect(() => {
     const target = open ? 0 : -180;
     const controls = animate(rotX, target, {
-      duration: 0.92,
-      ease: [0.4, 0.0, 0.2, 1.0],
+      duration: 0.7,
+      ease: [0.33, 1, 0.68, 1],
     });
     return () => controls.stop();
   }, [open, rotX]);

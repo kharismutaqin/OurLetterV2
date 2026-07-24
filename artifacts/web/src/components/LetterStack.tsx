@@ -115,7 +115,7 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
                 rotateX: -Math.abs(position) * 3,
                 rotateZ: position === 0 ? 0 : Math.abs(position) % 2 === 1 ? 3 : -3,
               }}
-              transition={{ type: 'spring', stiffness: 220, damping: 24 }}
+              transition={{ type: 'tween', duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
             >
               <FoldedLetter
                 coverSrc={letter.coverSrc}
