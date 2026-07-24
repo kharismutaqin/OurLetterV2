@@ -89,7 +89,9 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
         onPanEnd={handleSwipe}
       >
         {letters.map((letter, index) => {
-          const position = (index - activeIndex + n) % n;
+          let position = index - activeIndex;
+          if (position > n / 2) position -= n;
+          if (position < -n / 2) position += n;
           const isFront = position === 0;
 
           return (
@@ -103,15 +105,15 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
                 height: panelH,
                 transformStyle: 'preserve-3d',
                 pointerEvents: isFront ? 'auto' : 'none',
-                zIndex: 30 - position,
+                zIndex: 30 - Math.abs(position),
                 filter: 'drop-shadow(0 5px 12px rgba(0,0,0,0.3))',
               }}
               animate={{
                 y: position * 18,
-                z: position * -40,
-                scale: 1 - position * 0.025,
-                rotateX: position * -3,
-                rotateZ: position === 0 ? 0 : position % 2 === 1 ? 3 : -3,
+                z: -Math.abs(position) * 40,
+                scale: 1 - Math.abs(position) * 0.025,
+                rotateX: -Math.abs(position) * 3,
+                rotateZ: position === 0 ? 0 : Math.abs(position) % 2 === 1 ? 3 : -3,
               }}
               transition={{ type: 'spring', stiffness: 220, damping: 24 }}
             >
