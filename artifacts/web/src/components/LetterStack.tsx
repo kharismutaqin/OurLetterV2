@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, PanInfo } from 'framer-motion';
 import { FoldedLetter } from './FoldedLetter';
 
@@ -19,29 +19,26 @@ export interface LetterStackProps {
 
 export function LetterStack({ letters, noteWidth }: LetterStackProps) {
   const panelH = noteWidth / ASPECT;
-  const initialOrder = useMemo(() => letters.map((l) => l.id), [letters]);
-  const [order, setOrder] = useState<string[]>(initialOrder);
+  const n = letters.length;
+  const [activeIndex, setActiveIndex] = useState(0);
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const frontId = order[0];
-  const frontIndex = initialOrder.indexOf(frontId);
+  const frontId = letters[activeIndex]?.id ?? null;
 
-  const rotate = (dir: -1 | 1) => {
+  // Close any open letter when the active letter changes — keeps the stack clean.
+  useEffect(() => {
     setOpenId(null);
-    setOrder((prev) => {
-      const next = [...prev];
-      if (dir === 1) {
-        const first = next.shift();
-        if (first) next.push(first);
-      } else {
-        const last = next.pop();
-        if (last) next.unshift(last);
-      }
-      return next;
-    });
+  }, [activeIndex]);
+
+  const goTo = (index: number) => {
+    setActiveIndex((index % n + n) % n);
   };
 
+  const goNext = () => goTo(activeIndex + 1);
+  const goPrev = () => goTo(activeIndex - 1);
+
   const handleTap = () => {
+    if (!frontId) return;
     setOpenId((prev) => (prev === frontId ? null : frontId));
   };
 
@@ -57,14 +54,18 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
 
     if (horizontal) {
       if (dx < -threshold || vx < -vThreshold) {
-        rotate(1);
+        // Swipe left → next letter.
+        goNext();
       } else if (dx > threshold || vx > vThreshold) {
-        rotate(-1);
+        // Swipe right → previous letter.
+        goPrev();
       }
     } else {
       if (dy < -threshold || vy < -vThreshold) {
-        setOpenId(frontId);
+        // Swipe up → open the front letter.
+        if (frontId) setOpenId(frontId);
       } else if (dy > threshold || vy > vThreshold) {
+        // Swipe down → close the open letter.
         setOpenId(null);
       }
     }
@@ -87,8 +88,8 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
         onTap={handleTap}
         onPanEnd={handleSwipe}
       >
-        {letters.map((letter) => {
-          const position = order.indexOf(letter.id);
+        {letters.map((letter, index) => {
+          const position = (index - activeIndex + n) % n;
           const isFront = position === 0;
 
           return (
@@ -135,9 +136,8 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
           gap: 20,
         }}
       >
-        {/* Prev */}
         <button
-          onClick={() => rotate(-1)}
+          onClick={goPrev}
           style={{
             width: 44,
             height: 44,
@@ -161,25 +161,11 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
           ←
         </button>
 
-        {/* Dot indicator */}
         <div style={{ display: 'flex', gap: 10 }}>
           {letters.map((letter, i) => (
             <button
               key={letter.id}
-              onClick={() => {
-                const currentIndex = initialOrder.indexOf(frontId);
-                const targetIndex = i;
-                const diff = targetIndex - currentIndex;
-                const n = letters.length;
-                // Shortest rotation direction
-                const dir =
-                  ((diff + n) % n) <= n / 2 ? diff : diff - n;
-                const absDir = dir > 0 ? 1 : -1;
-                const steps = Math.abs(dir);
-                for (let s = 0; s < steps; s++) {
-                  setTimeout(() => rotate(absDir), s * 180);
-                }
-              }}
+              onClick={() => goTo(i)}
               style={{
                 width: 10,
                 height: 10,
@@ -188,20 +174,19 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
                 cursor: 'pointer',
                 padding: 0,
                 background:
-                  i === frontIndex
+                  i === activeIndex
                     ? 'rgba(255,255,255,0.9)'
                     : 'rgba(255,255,255,0.2)',
                 transition: 'background 0.25s, transform 0.25s',
-                transform: i === frontIndex ? 'scale(1.3)' : 'scale(1)',
+                transform: i === activeIndex ? 'scale(1.3)' : 'scale(1)',
               }}
               aria-label={`Go to letter ${i + 1}`}
             />
           ))}
         </div>
 
-        {/* Next */}
         <button
-          onClick={() => rotate(1)}
+          onClick={goNext}
           style={{
             width: 44,
             height: 44,
