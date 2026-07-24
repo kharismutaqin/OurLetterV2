@@ -110,6 +110,7 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
                 z: position * -90,
                 scale: 1 - position * 0.08,
                 rotateX: position * -12,
+                rotateZ: position === 0 ? 0 : position % 2 === 1 ? 3 : -3,
                 opacity: 1 - position * 0.14,
               }}
               transition={{ type: 'spring', stiffness: 220, damping: 24 }}
