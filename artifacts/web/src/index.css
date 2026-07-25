@@ -50,12 +50,25 @@ body {
   inherits: false;
 }
 
-@keyframes shuffle-straighten {
-  50% { --angle: 0deg; }
-}
-
-@keyframes shuffle-reveal {
-  0% { translate: 0; }
-  50% { translate: -100% 0; --angle: 0deg; }
-  100% { translate: 0; }
+/* The selected card stays visible while the new card flies out from the deck,
+   then rises above it and flies back in to become the new front. */
+@keyframes fly-out-in {
+  0% {
+    translate: 0;
+    z-index: 19;
+  }
+  45% {
+    translate: -85% -45%;
+    --angle: 0deg;
+  }
+  55% {
+    translate: -85% -45%;
+    z-index: 30;
+    --angle: 0deg;
+  }
+  100% {
+    translate: 0;
+    z-index: 30;
+    --angle: 0deg;
+  }
 }

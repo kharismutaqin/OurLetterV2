@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FoldedLetter } from './FoldedLetter';
 
@@ -24,34 +24,30 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
   const panelH = noteWidth / ASPECT;
   const n = letters.length;
   const [activeIndex, setActiveIndex] = useState(0);
+  const [transitionTo, setTransitionTo] = useState<number | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
-  const [shuffle, setShuffle] = useState(false);
-  const isFirstRender = useRef(true);
 
-  // Trigger a one-time shuffle animation whenever the selected letter changes.
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    let raf = 0;
-    setShuffle(false);
-    raf = requestAnimationFrame(() => setShuffle(true));
-    const timer = setTimeout(() => setShuffle(false), 600);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(timer);
-    };
-  }, [activeIndex]);
+  const indicatorIndex = transitionTo ?? activeIndex;
 
-  // Close an open letter when the selection changes.
+  // Complete the transition after the new card flies out, then back in.
   useEffect(() => {
+    if (transitionTo === null) return;
+    const timer = setTimeout(() => {
+      setActiveIndex(transitionTo);
+      setTransitionTo(null);
+    }, 750);
+    return () => clearTimeout(timer);
+  }, [transitionTo]);
+
+  const goTo = (index: number) => {
+    const target = ((index % n) + n) % n;
+    if (target === activeIndex || transitionTo !== null) return;
     setOpenId(null);
-  }, [activeIndex]);
-
-  const goTo = (index: number) => setActiveIndex(((index % n) + n) % n);
+    setTransitionTo(target);
+  };
 
   const handleTap = () => {
+    if (transitionTo !== null) return;
     const frontId = letters[activeIndex]?.id;
     if (!frontId) return;
     setOpenId((prev) => (prev === frontId ? null : frontId));
@@ -74,14 +70,24 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
         onTap={handleTap}
       >
         {letters.map((letter, index) => {
-          const isSelected = index === activeIndex;
+          const isTransitioning = transitionTo !== null;
+          const isTarget = isTransitioning && index === transitionTo;
+          const isActive = index === activeIndex;
           const distance = (index - activeIndex + n) % n;
-          const zIndex = 20 - distance;
-          const angle = isSelected ? 0 : ANGLES[index % ANGLES.length];
-          const animation = shuffle
-            ? isSelected
-              ? 'shuffle-reveal 0.6s cubic-bezier(0.33, 1, 0.68, 1) forwards'
-              : 'shuffle-straighten 0.6s cubic-bezier(0.33, 1, 0.68, 1) forwards'
+
+          // During transition: current card stays on top, target card is just below it,
+          // all other cards sit below the target so the target can fly out and in cleanly.
+          const zIndex = isTransitioning
+            ? isActive
+              ? 20
+              : isTarget
+              ? undefined
+              : 18 - distance
+            : 20 - distance;
+
+          const angle = isActive ? 0 : ANGLES[index % ANGLES.length];
+          const animation = isTarget
+            ? 'fly-out-in 0.75s ease-in-out forwards'
             : 'none';
 
           return (
@@ -91,9 +97,10 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
                 gridArea: '1 / 1',
                 placeSelf: 'center',
                 zIndex,
-                pointerEvents: isSelected ? 'auto' : 'none',
+                pointerEvents: isActive && !isTransitioning ? 'auto' : 'none',
                 rotate: 'var(--angle)',
                 animation,
+                transition: isTarget ? 'none' : 'rotate 0.3s ease-out',
                 ['--angle' as string]: `${angle}deg`,
               } as React.CSSProperties}
             >
@@ -102,7 +109,7 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
                 topSrc={letter.topSrc}
                 bottomSrc={letter.bottomSrc}
                 noteWidth={noteWidth}
-                isOpen={isSelected && openId === letter.id}
+                isOpen={isActive && openId === letter.id}
                 onOpenChange={(open) => setOpenId(open ? letter.id : null)}
                 interactive={false}
               />
@@ -125,11 +132,11 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
               cursor: 'pointer',
               padding: 0,
               background:
-                i === activeIndex
+                i === indicatorIndex
                   ? 'rgba(255,255,255,0.9)'
                   : 'rgba(255,255,255,0.2)',
               transition: 'background 0.25s, transform 0.25s',
-              transform: i === activeIndex ? 'scale(1.3)' : 'scale(1)',
+              transform: i === indicatorIndex ? 'scale(1.3)' : 'scale(1)',
             }}
             aria-label={`Go to letter ${i + 1}`}
           />
