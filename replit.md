@@ -46,7 +46,6 @@ Mobile-first web app. A personal letters gallery built step by step.
 - No `artifacts/api-server`, `artifacts/mockup-sandbox`, or pre-generated UI component folders.
 - Develop directly on the app.
 - Build frontend-only, Vercel-ready projects.
-- Visual style: playful, hand-drawn, soft light pastel palette, rounded corners on letter cards.
 
 ## Pointers
 

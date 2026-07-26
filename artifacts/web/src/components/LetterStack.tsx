@@ -125,25 +125,80 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 24,
+          gap: 20,
         }}
       >
-        <button className="control-btn" onClick={goPrev} aria-label="Previous letter">
+        <button
+          onClick={goPrev}
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: '50%',
+            border: '1px solid rgba(255,255,255,0.15)',
+            background: 'rgba(255,255,255,0.06)',
+            color: '#fff',
+            fontSize: 18,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            transition: 'background 0.2s',
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
+          onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+          aria-label="Previous letter"
+        >
           ←
         </button>
 
-        <div style={{ display: 'flex', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 10 }}>
           {letters.map((letter, i) => (
             <button
               key={letter.id}
               onClick={() => goTo(i)}
-              className={`indicator-dot ${i === indicatorIndex ? 'active' : ''}`}
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                background:
+                  i === indicatorIndex
+                    ? 'rgba(255,255,255,0.9)'
+                    : 'rgba(255,255,255,0.2)',
+                transition: 'background 0.25s, transform 0.25s',
+                transform: i === indicatorIndex ? 'scale(1.3)' : 'scale(1)',
+              }}
               aria-label={`Go to letter ${i + 1}`}
             />
           ))}
         </div>
 
-        <button className="control-btn" onClick={goNext} aria-label="Next letter">
+        <button
+          onClick={goNext}
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: '50%',
+            border: '1px solid rgba(255,255,255,0.15)',
+            background: 'rgba(255,255,255,0.06)',
+            color: '#fff',
+            fontSize: 18,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            transition: 'background 0.2s',
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
+          onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+          aria-label="Next letter"
+        >
           →
         </button>
       </div>

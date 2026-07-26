@@ -22,7 +22,7 @@ export interface FoldedLetterProps {
 }
 
 /**
- * FoldedLetter — a single folded paper note with a playful, hand-drawn 3-D open/close animation.
+ * FoldedLetter — a single folded paper note with a realistic CSS 3-D open/close animation.
  *
  * Layout:
  *   • The component's own bounding box is ONE panel tall (noteWidth / ASPECT).
@@ -64,11 +64,11 @@ export function FoldedLetter({
   // Subtle upward drift as the note lifts off the surface
   const liftY = useTransform(rotX, [-180, -90, 0], [0, -8, 0]);
 
-  // Soft hand-drawn drop-shadow depth tracks the lift
+  // Drop-shadow depth tracks the lift
   const dropShadowFilter = useTransform(rotX, [-180, -90, 0], [
-    'drop-shadow(0 3px 10px rgba(74,59,50,0.16))',
-    'drop-shadow(0 14px 28px rgba(74,59,50,0.22))',
-    'drop-shadow(0 6px 16px rgba(74,59,50,0.14))',
+    'drop-shadow(0 3px 8px rgba(0,0,0,0.16))',
+    'drop-shadow(0 14px 28px rgba(0,0,0,0.24))',
+    'drop-shadow(0 6px 16px rgba(0,0,0,0.14))',
   ]);
 
   // Fold-crease hairline only visible when fully open
@@ -91,8 +91,6 @@ export function FoldedLetter({
       setInternalOpen(!open);
     }
   };
-
-  const radius = 'var(--letter-radius)';
 
   return (
     <div
@@ -123,15 +121,7 @@ export function FoldedLetter({
           }}
         >
           {/* ── Bottom panel (stationary) ─────────────────────────────── */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: `0 0 ${radius} ${radius}`,
-              overflow: 'hidden',
-              background: '#fff',
-            }}
-          >
+          <div style={{ position: 'absolute', inset: 0 }}>
             <img
               src={bottomSrc}
               alt=""
@@ -143,7 +133,7 @@ export function FoldedLetter({
                 position: 'absolute',
                 inset: 0,
                 background:
-                  'linear-gradient(to bottom, rgba(74,59,50,1) 0%, rgba(74,59,50,0.4) 100%)',
+                  'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 100%)',
                 opacity: bottomFaceShadow,
                 pointerEvents: 'none',
               }}
@@ -170,9 +160,6 @@ export function FoldedLetter({
                 inset: 0,
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
-                borderRadius: `${radius} ${radius} 0 0`,
-                overflow: 'hidden',
-                background: '#fff',
               }}
             >
               <img
@@ -185,7 +172,7 @@ export function FoldedLetter({
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'rgba(74,59,50,1)',
+                  background: 'rgba(0,0,0,1)',
                   opacity: topFaceShadow,
                   pointerEvents: 'none',
                 }}
@@ -200,9 +187,6 @@ export function FoldedLetter({
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
                 transform: 'rotateX(180deg)',
-                borderRadius: radius,
-                overflow: 'hidden',
-                background: '#fff',
               }}
             >
               <img
@@ -222,7 +206,7 @@ export function FoldedLetter({
               left: 0,
               right: 0,
               height: 1,
-              background: 'rgba(74,59,50,0.15)',
+              background: 'rgba(0,0,0,0.15)',
               opacity: creaseOpacity,
               pointerEvents: 'none',
               zIndex: 10,
