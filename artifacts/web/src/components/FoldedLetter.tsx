@@ -51,25 +51,8 @@ export function FoldedLetter({
   // –180 = closed (cover.png on top), 0 = open (top.png flat above bottom)
   const rotX = useMotionValue(-180);
 
-  // Mid-fold darkness on the inside-top face — depth / shadow cue
-  const topFaceShadow = useTransform(
-    rotX,
-    [-180, -135, -90, -45, 0],
-    [0, 0.18, 0.38, 0.18, 0],
-  );
-
-  // Shadow cast by the cover resting on the bottom panel when closed
-  const bottomFaceShadow = useTransform(rotX, [-180, -90, 0], [0.22, 0.08, 0]);
-
   // Subtle upward drift as the note lifts off the surface
   const liftY = useTransform(rotX, [-180, -90, 0], [0, -8, 0]);
-
-  // Drop-shadow depth tracks the lift
-  const dropShadowFilter = useTransform(rotX, [-180, -90, 0], [
-    'drop-shadow(0 3px 8px rgba(0,0,0,0.16))',
-    'drop-shadow(0 14px 28px rgba(0,0,0,0.24))',
-    'drop-shadow(0 6px 16px rgba(0,0,0,0.14))',
-  ]);
 
   // Fold-crease hairline only visible when fully open
   const creaseOpacity = useTransform(rotX, [-180, -60, 0], [0, 0, 0.45]);
@@ -108,7 +91,6 @@ export function FoldedLetter({
           perspective: '1100px',
           perspectiveOrigin: '50% 50%',
           y: liftY,
-          filter: dropShadowFilter,
         }}
       >
         {/* Scene root — preserve-3d; sized to ONE panel height */}
@@ -127,16 +109,6 @@ export function FoldedLetter({
               alt=""
               draggable={false}
               style={{ width: '100%', height: '100%', display: 'block', objectFit: 'fill' }}
-            />
-            <motion.div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background:
-                  'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 100%)',
-                opacity: bottomFaceShadow,
-                pointerEvents: 'none',
-              }}
             />
           </div>
 
@@ -167,15 +139,6 @@ export function FoldedLetter({
                 alt=""
                 draggable={false}
                 style={{ width: '100%', height: '100%', display: 'block', objectFit: 'fill' }}
-              />
-              <motion.div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'rgba(0,0,0,1)',
-                  opacity: topFaceShadow,
-                  pointerEvents: 'none',
-                }}
               />
             </div>
 
