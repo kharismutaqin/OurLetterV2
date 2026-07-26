@@ -7,8 +7,14 @@
 }
 
 :root {
-  --color-bg: #0a0a0a;
-  --color-grid: rgba(255, 255, 255, 0.06);
+  --nb-black: #1A1A1A;
+  --nb-cream: #FFF8F0;
+  --nb-pink: #FFB7B2;
+  --nb-pink-dark: #FF9E99;
+  --nb-mint: #B5EAD7;
+  --nb-lavender: #C7CEEA;
+  --nb-butter: #FFDAC1;
+  --nb-grid: rgba(26, 26, 26, 0.22);
   --grid-size: 40px;
 }
 
@@ -18,10 +24,12 @@ html, body, #root {
 }
 
 body {
-  background-color: var(--color-bg);
+  font-family: 'Fredoka', sans-serif;
+  background-color: var(--nb-cream);
+  color: var(--nb-black);
   background-image:
-    linear-gradient(var(--color-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    linear-gradient(var(--nb-grid) 2px, transparent 2px),
+    linear-gradient(90deg, var(--nb-grid) 2px, transparent 2px);
   background-size: var(--grid-size) var(--grid-size);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -33,14 +41,117 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   overflow: visible;
   padding: 2rem;
-  /* Top area is intentionally left empty for a future header. */
 }
 
 .letter-stage {
   overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  width: 100%;
+}
+
+/* ── Neo-brutalist header ──────────────────────────────────────────────── */
+.nb-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.nb-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  background: var(--nb-pink);
+  border: 3px solid var(--nb-black);
+  border-radius: 1rem;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 6px 6px 0 var(--nb-black);
+  transform: rotate(-2deg);
+}
+
+.nb-badge {
+  background: var(--nb-mint);
+  border: 3px solid var(--nb-black);
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 4px 4px 0 var(--nb-black);
+  transform: rotate(3deg);
+}
+
+/* ── Controls ──────────────────────────────────────────────────────────── */
+.nb-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.nb-btn {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  border: 3px solid var(--nb-black);
+  background: var(--nb-pink);
+  color: var(--nb-black);
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 4px 4px 0 var(--nb-black);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.nb-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--nb-black);
+  background: var(--nb-pink-dark);
+}
+
+.nb-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--nb-black);
+}
+
+.nb-dots {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.nb-dot {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  border: 3px solid var(--nb-black);
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 2px 2px 0 var(--nb-black);
+}
+
+.nb-dot:hover {
+  background: var(--nb-butter);
+}
+
+.nb-dot.active {
+  background: var(--nb-black);
+  transform: scale(1.3);
+  box-shadow: 3px 3px 0 var(--nb-black);
 }
 
 /* ── Shuffle card animation helpers ───────────────────────────────────── */
