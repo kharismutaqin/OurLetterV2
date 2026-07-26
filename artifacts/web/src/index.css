@@ -115,12 +115,6 @@ body {
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-.nb-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--nb-black);
-  background: var(--nb-pink-dark);
-}
-
 .nb-btn:active {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 var(--nb-black);
@@ -144,14 +138,18 @@ body {
   box-shadow: 2px 2px 0 var(--nb-black);
 }
 
-.nb-dot:hover {
-  background: var(--nb-butter);
-}
-
 .nb-dot.active {
   background: var(--nb-black);
   transform: scale(1.3);
   box-shadow: 3px 3px 0 var(--nb-black);
+}
+
+/* ── Flat neo-brutalist outline & shadow for each letter card ─────────── */
+.folded-letter-scene {
+  border: 3px solid var(--nb-black);
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--nb-black);
 }
 
 /* ── Shuffle card animation helpers ───────────────────────────────────── */
