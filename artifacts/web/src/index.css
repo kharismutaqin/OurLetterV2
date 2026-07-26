@@ -7,9 +7,19 @@
 }
 
 :root {
-  --color-bg: #0a0a0a;
-  --color-grid: rgba(255, 255, 255, 0.06);
-  --grid-size: 40px;
+  --paper: #fff8f0;
+  --paper-warm: #fff0e0;
+  --ink: #4a3b32;
+  --ink-light: #7a6658;
+  --pink: #ffd6e5;
+  --blue: #d6f0ff;
+  --yellow: #fff5b7;
+  --green: #d6ffe0;
+  --lavender: #ede6ff;
+  --shadow: rgba(74, 59, 50, 0.14);
+  --dot: rgba(74, 59, 50, 0.06);
+
+  --letter-radius: 18px;
 }
 
 html, body, #root {
@@ -18,11 +28,11 @@ html, body, #root {
 }
 
 body {
-  background-color: var(--color-bg);
-  background-image:
-    linear-gradient(var(--color-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
-  background-size: var(--grid-size) var(--grid-size);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: radial-gradient(circle at 1px 1px, var(--dot) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -33,14 +43,78 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   overflow: visible;
   padding: 2rem;
-  /* Top area is intentionally left empty for a future header. */
+  gap: 2.5rem;
+}
+
+.page-header {
+  text-align: center;
+}
+
+.page-title {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 3.25rem;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  text-shadow: 2px 2px 0 var(--yellow);
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  margin-top: 0.5rem;
 }
 
 .letter-stage {
   overflow: visible;
+}
+
+/* Hand-drawn control buttons */
+.control-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--pink);
+  color: var(--ink);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.control-btn:hover {
+  background: var(--blue);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.control-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+.indicator-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--yellow);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.indicator-dot.active {
+  background: var(--pink);
+  transform: scale(1.4);
 }
 
 /* ── Shuffle card animation helpers ───────────────────────────────────── */
