@@ -134,9 +134,9 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
             width: 44,
             height: 44,
             borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.15)',
-            background: 'rgba(255,255,255,0.06)',
-            color: '#fff',
+            border: '1px solid rgba(0,0,0,0.12)',
+            background: 'rgba(0,0,0,0.04)',
+            color: 'var(--color-text)',
             fontSize: 18,
             cursor: 'pointer',
             display: 'flex',
@@ -146,8 +146,8 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
             WebkitBackdropFilter: 'blur(8px)',
             transition: 'background 0.2s',
           }}
-          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
-          onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.08)')}
+          onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
           aria-label="Previous letter"
         >
           ←
@@ -167,8 +167,8 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
                 padding: 0,
                 background:
                   i === indicatorIndex
-                    ? 'rgba(255,255,255,0.9)'
-                    : 'rgba(255,255,255,0.2)',
+                    ? 'rgba(0,0,0,0.85)'
+                    : 'rgba(0,0,0,0.2)',
                 transition: 'background 0.25s, transform 0.25s',
                 transform: i === indicatorIndex ? 'scale(1.3)' : 'scale(1)',
               }}
@@ -183,9 +183,9 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
             width: 44,
             height: 44,
             borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.15)',
-            background: 'rgba(255,255,255,0.06)',
-            color: '#fff',
+            border: '1px solid rgba(0,0,0,0.12)',
+            background: 'rgba(0,0,0,0.04)',
+            color: 'var(--color-text)',
             fontSize: 18,
             cursor: 'pointer',
             display: 'flex',
@@ -195,8 +195,8 @@ export function LetterStack({ letters, noteWidth }: LetterStackProps) {
             WebkitBackdropFilter: 'blur(8px)',
             transition: 'background 0.2s',
           }}
-          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
-          onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.08)')}
+          onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
           aria-label="Next letter"
         >
           →
