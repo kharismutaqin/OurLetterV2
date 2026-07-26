@@ -13,10 +13,6 @@ const LETTERS = Array.from({ length: 7 }, (_, i) => {
 export default function App() {
   return (
     <div className="page">
-      <header className="nb-header">
-        <h1 className="nb-title">My Letters</h1>
-        <span className="nb-badge">7 notes</span>
-      </header>
       <div className="letter-stage">
         <LetterStack letters={LETTERS} noteWidth={320} />
       </div>

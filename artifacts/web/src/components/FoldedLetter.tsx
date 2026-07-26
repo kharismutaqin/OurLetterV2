@@ -64,6 +64,13 @@ export function FoldedLetter({
   // Subtle upward drift as the note lifts off the surface
   const liftY = useTransform(rotX, [-180, -90, 0], [0, -8, 0]);
 
+  // Drop-shadow depth tracks the lift
+  const dropShadowFilter = useTransform(rotX, [-180, -90, 0], [
+    'drop-shadow(0 3px 8px rgba(0,0,0,0.16))',
+    'drop-shadow(0 14px 28px rgba(0,0,0,0.24))',
+    'drop-shadow(0 6px 16px rgba(0,0,0,0.14))',
+  ]);
+
   // Fold-crease hairline only visible when fully open
   const creaseOpacity = useTransform(rotX, [-180, -60, 0], [0, 0, 0.45]);
 
@@ -101,11 +108,11 @@ export function FoldedLetter({
           perspective: '1100px',
           perspectiveOrigin: '50% 50%',
           y: liftY,
+          filter: dropShadowFilter,
         }}
       >
         {/* Scene root — preserve-3d; sized to ONE panel height */}
         <div
-          className="folded-letter-scene"
           style={{
             position: 'relative',
             width: noteWidth,
@@ -114,7 +121,7 @@ export function FoldedLetter({
           }}
         >
           {/* ── Bottom panel (stationary) ─────────────────────────────── */}
-          <div style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0 }}>
             <img
               src={bottomSrc}
               alt=""
@@ -153,8 +160,6 @@ export function FoldedLetter({
                 inset: 0,
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
-                borderRadius: 'inherit',
-                overflow: 'hidden',
               }}
             >
               <img
@@ -182,8 +187,6 @@ export function FoldedLetter({
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
                 transform: 'rotateX(180deg)',
-                borderRadius: 'inherit',
-                overflow: 'hidden',
               }}
             >
               <img
