@@ -54,8 +54,6 @@ export function FoldedLetter({
   // Subtle upward drift as the note lifts off the surface
   const liftY = useTransform(rotX, [-180, -90, 0], [0, -8, 0]);
 
-  // Fold-crease hairline only visible when fully open
-  const creaseOpacity = useTransform(rotX, [-180, -60, 0], [0, 0, 0.45]);
 
   useEffect(() => {
     const target = open ? 0 : -180;
@@ -161,20 +159,6 @@ export function FoldedLetter({
             </div>
           </motion.div>
 
-          {/* Fold crease — hairline at the fold axis */}
-          <motion.div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 1,
-              background: 'rgba(0,0,0,0.15)',
-              opacity: creaseOpacity,
-              pointerEvents: 'none',
-              zIndex: 10,
-            }}
-          />
         </div>
       </motion.div>
     </div>
